@@ -1,11 +1,12 @@
 package liedge.bannercapes;
 
 import com.mojang.logging.LogUtils;
+import liedge.bannercapes.registry.BannerCapesItems;
+import liedge.bannercapes.registry.BannerCapesRecipeSerializers;
+import liedge.bannercapes.registry.BannerCapesTabs;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
 @Mod(BannerCapes.MODID)
@@ -16,15 +17,8 @@ public class BannerCapes
 
     public BannerCapes(IEventBus modBus, ModContainer modContainer)
     {
-        modBus.register(new CommonSetup());
-    }
-
-    private static class CommonSetup
-    {
-        @SubscribeEvent
-        private void onSetup(final FMLCommonSetupEvent event)
-        {
-            LOGGER.debug("Mod test loaded.");
-        }
+        BannerCapesItems.register(modBus);
+        BannerCapesRecipeSerializers.register(modBus);
+        BannerCapesTabs.register(modBus);
     }
 }
