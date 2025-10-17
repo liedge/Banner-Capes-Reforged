@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "bannercapes:item/brown_banner_elytra_cape"
+  }
+}

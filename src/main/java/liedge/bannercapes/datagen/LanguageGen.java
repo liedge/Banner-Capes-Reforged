@@ -22,6 +22,7 @@ class LanguageGen extends LimaLanguageProvider
         {
             String localizedColor = localizeSimpleName(color);
             addItem(BannerCapesItems.BANNER_CAPES.get(color), localizedColor + " Banner Cape");
+            addItem(BannerCapesItems.BANNER_ELYTRA_CAPES.get(color), localizedColor + " Banner Elytra Cape");
         }
 
         creativeTab(BannerCapesTabs.MAIN_TAB, "Banner Capes");

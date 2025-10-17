@@ -33,6 +33,7 @@ public final class BannerCapesTabs
         for (DyeColor color : DyeColor.values())
         {
             output.accept(BannerCapesItems.BANNER_CAPES.get(color));
+            output.accept(BannerCapesItems.BANNER_ELYTRA_CAPES.get(color));
         }
     }
 }

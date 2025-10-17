@@ -27,7 +27,7 @@ final class BannerCapesDatagen
 
         event.addProvider(new CuriosDataGen(packOutput, helper, registries));
         event.addProvider(new ItemModelsGen(packOutput, resources, helper));
-        event.addProvider(new ItemTagsGen(packOutput, registries, helper));
+        event.addProvider(new ItemTagsGen(packOutput, resources, registries, helper));
         event.addProvider(new LanguageGen(packOutput, resources));
         event.addProvider(new RecipesGen(packOutput, registries, resources));
     }

@@ -6,8 +6,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import static liedge.bannercapes.registry.BannerCapesItems.BANNER_CAPES;
-import static liedge.bannercapes.registry.BannerCapesItems.CAPE_HARNESS;
+import static liedge.bannercapes.registry.BannerCapesItems.*;
 
 class ItemModelsGen extends LimaItemModelProvider
 {
@@ -24,6 +23,7 @@ class ItemModelsGen extends LimaItemModelProvider
         for (DyeColor color : DyeColor.values())
         {
             generated(BANNER_CAPES.get(color));
+            generated(BANNER_ELYTRA_CAPES.get(color));
         }
     }
 }

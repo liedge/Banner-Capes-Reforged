@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
+import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.Direction;
@@ -86,10 +87,25 @@ public final class BannerCapeModel
         double backDirX = Mth.sin(bodyYaw * Mth.DEG_TO_RAD);
         double backDirZ = -Mth.cos(bodyYaw * Mth.DEG_TO_RAD);
 
-        float pitch = Mth.clamp((float)desiredY * 10.0F, -6.0F, 32.0F);
+        float pitchMax = player.isFallFlying() ? 16f : 32f;
+        float pitch = Mth.clamp((float)desiredY * 10.0F, -6.0F, pitchMax);
 
         float speedPitch = (float)(desiredX * backDirX + desiredZ * backDirZ) * 100.0F;
-        speedPitch = Mth.clamp(speedPitch, 0.0F, 150.0F);
+
+        final float speedPitchMin;
+        final float speedPitchMax;
+        if (player.isFallFlying())
+        {
+            speedPitchMin = 5f;
+            speedPitchMax = 10f;
+        }
+        else
+        {
+            speedPitchMin = 0f;
+            speedPitchMax = 150f;
+        }
+
+        speedPitch = Mth.clamp(speedPitch, speedPitchMin, speedPitchMax);
 
         float speed = Mth.lerp(partialTick, player.oBob, player.bob);
         pitch += Mth.sin(Mth.lerp(partialTick, player.walkDistO, player.walkDist) * 6.0F) * 32.0F * speed;
