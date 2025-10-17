@@ -20,5 +20,6 @@ public final class BannerCapesRecipeSerializers
         SERIALIZERS.register(bus);
     }
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BannerCapeRecipe>> BANNER_CAPE_CRAFTING = SERIALIZERS.register("banner_cape", () -> new SimpleCraftingRecipeSerializer<>(BannerCapeRecipe::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BannerCapeRecipe.BannerToCape>> BANNER_TO_CAPE = SERIALIZERS.register("banner_to_cape", () -> new SimpleCraftingRecipeSerializer<>(BannerCapeRecipe.BannerToCape::new));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BannerCapeRecipe.CapeToElytraCape>> CAPE_TO_ELYTRA_CAPE = SERIALIZERS.register("cape_to_elytra_cape", () -> new SimpleCraftingRecipeSerializer<>(BannerCapeRecipe.CapeToElytraCape::new));
 }

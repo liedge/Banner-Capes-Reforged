@@ -22,7 +22,8 @@ class RecipesGen extends LimaRecipeProvider
     @Override
     protected void buildRecipes(RecipeOutput output, HolderLookup.Provider registries)
     {
-        SpecialRecipeBuilder.special(BannerCapeRecipe::new).save(output, modResources.location("cape_from_banner"));
+        SpecialRecipeBuilder.special(BannerCapeRecipe.BannerToCape::new).save(output, modResources.location("banner_to_cape"));
+        SpecialRecipeBuilder.special(BannerCapeRecipe.CapeToElytraCape::new).save(output, modResources.location("cape_to_elytra_cape"));
 
         shaped(BannerCapesItems.CAPE_HARNESS).input('i', Items.IRON_INGOT).input('s', Items.STRING).patterns("i i", "s s", " s ").save(output);
     }

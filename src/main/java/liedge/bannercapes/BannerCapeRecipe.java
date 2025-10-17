@@ -5,7 +5,9 @@ import liedge.bannercapes.registry.BannerCapesRecipeSerializers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
@@ -13,80 +15,86 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 
-public class BannerCapeRecipe extends CustomRecipe
+public abstract class BannerCapeRecipe<T extends Item> extends CustomRecipe
 {
-    public BannerCapeRecipe(CraftingBookCategory category)
+    protected BannerCapeRecipe(CraftingBookCategory category)
     {
         super(category);
     }
 
+    protected abstract Item getConversionItem();
+
+    protected abstract Class<T> getBannerItemClass();
+
+    protected abstract ItemStack assemble(ItemStack bannerStack, T bannerItem);
+
     @Override
     public boolean matches(CraftingInput input, Level level)
     {
-        boolean foundHarness = false;
+        boolean foundConversionItem = false;
         boolean foundBanner = false;
 
         for (int i = 0; i < input.size(); i++)
         {
             ItemStack stack = input.getItem(i);
-            if (!stack.isEmpty())
+            if (stack.isEmpty()) continue;
+
+            // Allow 1 banner item
+            if (getBannerItemClass().isInstance(stack.getItem()))
             {
-                if (stack.getItem() instanceof BannerItem)
-                {
-                    if (!foundBanner) foundBanner = true;
-                    else return false;
-                }
-                else if (stack.is(BannerCapesItems.CAPE_HARNESS))
-                {
-                    if (!foundHarness) foundHarness = true;
-                    else return false;
-                }
-                else
-                {
-                    return false;
-                }
+                if (!foundBanner) foundBanner = true;
+                else return false;
+            }
+            // Allow 1 conversion item (harness or elytra)
+            else if (stack.is(getConversionItem()))
+            {
+                if (!foundConversionItem) foundConversionItem = true;
+                else return false;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        return foundHarness && foundBanner;
+        return foundConversionItem && foundBanner;
     }
 
     @Override
     public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries)
     {
-        boolean foundHarness = false;
+        boolean foundConversionItem = false;
         ItemStack bannerStack = ItemStack.EMPTY;
 
         for (int i = 0; i < input.size(); i++)
         {
             ItemStack stack = input.getItem(i);
-            if (!stack.isEmpty())
+            if (stack.isEmpty()) continue;
+
+            if (getBannerItemClass().isInstance(stack.getItem()))
             {
-                if (stack.getItem() instanceof BannerItem)
-                {
-                    if (bannerStack.isEmpty()) bannerStack = stack.copy();
-                    else return ItemStack.EMPTY;
-                }
-                else if (stack.is(BannerCapesItems.CAPE_HARNESS))
-                {
-                    if (!foundHarness) foundHarness = true;
-                    else return ItemStack.EMPTY;
-                }
-                else
-                {
-                    return ItemStack.EMPTY;
-                }
+                if (bannerStack.isEmpty()) bannerStack = stack.copy();
+                else return ItemStack.EMPTY;
+            }
+            else if (stack.is(getConversionItem()))
+            {
+                if (!foundConversionItem) foundConversionItem = true;
+                else return ItemStack.EMPTY;
+            }
+            else
+            {
+                return ItemStack.EMPTY;
             }
         }
 
-        if (foundHarness && !bannerStack.isEmpty() && bannerStack.getItem() instanceof BannerItem bannerItem)
+        if (foundConversionItem && !bannerStack.isEmpty())
         {
-            ItemStack result = BannerCapesItems.BANNER_CAPES.get(bannerItem.getColor()).toStack();
-            result.set(DataComponents.BANNER_PATTERNS, bannerStack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY));
-            return result;
+            return assemble(bannerStack, getBannerItemClass().cast(bannerStack.getItem()));
         }
-
-        return ItemStack.EMPTY;
+        else
+        {
+            return ItemStack.EMPTY;
+        }
     }
 
     @Override
@@ -95,9 +103,71 @@ public class BannerCapeRecipe extends CustomRecipe
         return width >= 3 && height >= 3;
     }
 
-    @Override
-    public RecipeSerializer<?> getSerializer()
+    public static class BannerToCape extends BannerCapeRecipe<BannerItem>
     {
-        return BannerCapesRecipeSerializers.BANNER_CAPE_CRAFTING.get();
+        public BannerToCape(CraftingBookCategory category)
+        {
+            super(category);
+        }
+
+        @Override
+        protected Item getConversionItem()
+        {
+            return BannerCapesItems.CAPE_HARNESS.get();
+        }
+
+        @Override
+        protected Class<BannerItem> getBannerItemClass()
+        {
+            return BannerItem.class;
+        }
+
+        @Override
+        protected ItemStack assemble(ItemStack bannerStack, BannerItem bannerItem)
+        {
+            ItemStack result = BannerCapesItems.BANNER_CAPES.get(bannerItem.getColor()).toStack();
+            result.set(DataComponents.BANNER_PATTERNS, bannerStack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY));
+            return result;
+        }
+
+        @Override
+        public RecipeSerializer<?> getSerializer()
+        {
+            return BannerCapesRecipeSerializers.BANNER_TO_CAPE.get();
+        }
+    }
+
+    public static class CapeToElytraCape extends BannerCapeRecipe<BannerCapeItem>
+    {
+        public CapeToElytraCape(CraftingBookCategory category)
+        {
+            super(category);
+        }
+
+        @Override
+        protected Item getConversionItem()
+        {
+            return Items.ELYTRA;
+        }
+
+        @Override
+        protected Class<BannerCapeItem> getBannerItemClass()
+        {
+            return BannerCapeItem.class;
+        }
+
+        @Override
+        protected ItemStack assemble(ItemStack bannerStack, BannerCapeItem bannerItem)
+        {
+            ItemStack result = BannerCapesItems.BANNER_ELYTRA_CAPES.get(bannerItem.getBaseColor()).toStack();
+            result.set(DataComponents.BANNER_PATTERNS, bannerStack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY));
+            return result;
+        }
+
+        @Override
+        public RecipeSerializer<?> getSerializer()
+        {
+            return BannerCapesRecipeSerializers.CAPE_TO_ELYTRA_CAPE.get();
+        }
     }
 }
