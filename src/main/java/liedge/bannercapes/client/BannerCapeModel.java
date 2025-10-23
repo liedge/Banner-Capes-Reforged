@@ -7,12 +7,10 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
-import net.minecraft.client.renderer.entity.layers.ElytraLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.EnumSet;
@@ -31,7 +29,7 @@ public final class BannerCapeModel
 
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, AbstractClientPlayer player, ItemStack capeStack, ItemStack chestItem, BannerCapeItem capeItem, float partialTick)
     {
-        if (!player.isInvisible() && player.isModelPartShown(PlayerModelPart.CAPE))
+        if (!player.isInvisible())
         {
             setupCapeAnimation(player, chestItem);
 
