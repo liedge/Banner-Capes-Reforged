@@ -8,6 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -61,6 +62,18 @@ public record CapeToElytraCapeRecipe(Ingredient base, Ingredient additional) imp
         result.set(DataComponents.ENCHANTMENTS, enchantmentsToCopy);
 
         return result;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries)
+    {
+        return BannerCapesItems.BANNER_ELYTRA_CAPES.get(DyeColor.WHITE).toStack();
+    }
+
+    @Override
+    public boolean isIncomplete()
+    {
+        return base.isEmpty() || additional.isEmpty();
     }
 
     @Override

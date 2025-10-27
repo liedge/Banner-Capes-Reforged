@@ -30,6 +30,17 @@ repositories {
     }
 
     maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+
+    maven {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
     }
@@ -148,6 +159,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+    // compile against the JEI API but do not include it at runtime
+    compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
+    // at runtime, use the full JEI jar for NeoForge
+    runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
+
     // Test with compileOnly to ensure we can run without
     implementation("liedge:limacore-${minecraft_version}:1.10.0")
 
@@ -171,6 +187,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_version            : mod_version,
             mod_authors            : mod_authors,
             mod_description        : mod_description,
+            jei_version_range      : jei_version_range,
             curios_version_range   : curios_version_range
     ]
     inputs.properties replaceProperties

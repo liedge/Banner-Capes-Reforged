@@ -1,6 +1,7 @@
 package liedge.bannercapes.client;
 
 import liedge.bannercapes.BannerCapes;
+import liedge.bannercapes.integration.CuriosIntegration;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.neoforged.api.distmarker.Dist;

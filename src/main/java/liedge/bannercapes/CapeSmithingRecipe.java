@@ -1,6 +1,5 @@
 package liedge.bannercapes;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmithingRecipe;
@@ -37,11 +36,5 @@ public interface CapeSmithingRecipe extends SmithingRecipe
     default boolean matches(SmithingRecipeInput input, Level level)
     {
         return isTemplateIngredient(input.template()) && isBaseIngredient(input.base()) && isAdditionIngredient(input.addition());
-    }
-
-    @Override
-    default ItemStack getResultItem(HolderLookup.Provider registries)
-    {
-        return ItemStack.EMPTY;
     }
 }

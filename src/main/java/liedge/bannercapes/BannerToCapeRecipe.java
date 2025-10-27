@@ -9,6 +9,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.BannerItem;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -55,6 +56,18 @@ public record BannerToCapeRecipe(Ingredient template, Ingredient base) implement
         ItemStack result = BannerCapesItems.BANNER_CAPES.get(bannerItem.getColor()).toStack();
         result.set(DataComponents.BANNER_PATTERNS, bannerStack.getOrDefault(DataComponents.BANNER_PATTERNS, BannerPatternLayers.EMPTY));
         return result;
+    }
+
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider registries)
+    {
+        return BannerCapesItems.BANNER_CAPES.get(DyeColor.WHITE).toStack();
+    }
+
+    @Override
+    public boolean isIncomplete()
+    {
+        return template.isEmpty() || base.isEmpty();
     }
 
     @Override
