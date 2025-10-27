@@ -1,12 +1,12 @@
 package liedge.bannercapes.datagen;
 
+import liedge.bannercapes.BannerCapesTags;
 import liedge.bannercapes.registry.BannerCapesItems;
 import liedge.limacore.data.generation.LimaTagsProvider;
 import liedge.limacore.lib.ModResources;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
@@ -20,25 +20,19 @@ import static net.minecraft.tags.ItemTags.EQUIPPABLE_ENCHANTABLE;
 
 class ItemTagsGen extends LimaTagsProvider.RegistryTags<Item>
 {
-    private final ModResources resources;
-
     ItemTagsGen(PackOutput packOutput, ModResources resources, CompletableFuture<HolderLookup.Provider> registries, @Nullable ExistingFileHelper helper)
     {
         super(packOutput, BuiltInRegistries.ITEM, resources.modid(), registries, helper);
-        this.resources = resources;
     }
 
     @Override
     protected void addTags(HolderLookup.Provider provider)
     {
-        TagKey<Item> bannerCapes = resources.itemTag("capes");
-        TagKey<Item> bannerElytraCapes = resources.itemTag("elytra_capes");
+        buildTag(BannerCapesTags.BANNER_CAPES).addHolders(List.copyOf(BannerCapesItems.BANNER_CAPES.values()));
+        buildTag(BannerCapesTags.BANNER_ELYTRA_CAPES).addHolders(List.copyOf(BannerCapesItems.BANNER_ELYTRA_CAPES.values()));
 
-        buildTag(bannerCapes).addHolders(List.copyOf(BannerCapesItems.BANNER_CAPES.values()));
-        buildTag(bannerElytraCapes).addHolders(List.copyOf(BannerCapesItems.BANNER_ELYTRA_CAPES.values()));
-
-        buildTag(EQUIPPABLE_ENCHANTABLE).addTags(bannerCapes, bannerElytraCapes);
-        buildTag(DURABILITY_ENCHANTABLE).addTag(bannerElytraCapes);
-        buildTag(CuriosTags.BACK).addTag(bannerCapes);
+        buildTag(EQUIPPABLE_ENCHANTABLE).addTags(BannerCapesTags.BANNER_CAPES, BannerCapesTags.BANNER_ELYTRA_CAPES);
+        buildTag(DURABILITY_ENCHANTABLE).addTag(BannerCapesTags.BANNER_ELYTRA_CAPES);
+        buildTag(CuriosTags.BACK).addTag(BannerCapesTags.BANNER_CAPES);
     }
 }

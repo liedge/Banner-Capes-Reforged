@@ -1,0 +1,9 @@
+{
+  "type": "bannercapes:banner_to_cape_smithing",
+  "base": {
+    "item": "bannercapes:cape_harness"
+  },
+  "template": {
+    "tag": "minecraft:banners"
+  }
+}
