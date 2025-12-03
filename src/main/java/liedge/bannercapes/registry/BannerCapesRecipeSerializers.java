@@ -2,6 +2,7 @@ package liedge.bannercapes.registry;
 
 import liedge.bannercapes.BannerCapes;
 import liedge.bannercapes.BannerToCapeRecipe;
+import liedge.bannercapes.CapeSmithingRecipe;
 import liedge.bannercapes.CapeToElytraCapeRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -20,6 +21,6 @@ public final class BannerCapesRecipeSerializers
         SERIALIZERS.register(bus);
     }
 
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BannerToCapeRecipe>> BANNER_TO_CAPE_SMITHING = SERIALIZERS.register("banner_to_cape_smithing", () -> BannerToCapeRecipe.SERIALIZER);
-    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CapeToElytraCapeRecipe>> CAPE_TO_ELYTRA_CAPE_SMITHING = SERIALIZERS.register("cape_to_elytra_cape_smithing", () -> CapeToElytraCapeRecipe.SERIALIZER);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BannerToCapeRecipe>> BANNER_TO_CAPE_SMITHING = SERIALIZERS.register("banner_to_cape_smithing", () -> new CapeSmithingRecipe.Serializer<>(BannerToCapeRecipe.CODEC, BannerToCapeRecipe.STREAM_CODEC));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CapeToElytraCapeRecipe>> CAPE_TO_ELYTRA_CAPE_SMITHING = SERIALIZERS.register("cape_to_elytra_cape_smithing", () -> new CapeSmithingRecipe.Serializer<>(CapeToElytraCapeRecipe.CODEC, CapeToElytraCapeRecipe.STREAM_CODEC));
 }

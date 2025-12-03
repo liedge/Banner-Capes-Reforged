@@ -1,16 +1,13 @@
 package liedge.bannercapes.datagen;
 
+import liedge.bannercapes.BannerCapes;
 import liedge.bannercapes.BannerCapesTags;
 import liedge.bannercapes.registry.BannerCapesItems;
-import liedge.limacore.data.generation.LimaTagsProvider;
-import liedge.limacore.lib.ModResources;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.curios.api.CuriosTags;
+import net.neoforged.neoforge.common.data.ItemTagsProvider;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -18,21 +15,23 @@ import java.util.concurrent.CompletableFuture;
 import static net.minecraft.tags.ItemTags.DURABILITY_ENCHANTABLE;
 import static net.minecraft.tags.ItemTags.EQUIPPABLE_ENCHANTABLE;
 
-class ItemTagsGen extends LimaTagsProvider.RegistryTags<Item>
+class ItemTagsGen extends ItemTagsProvider
 {
-    ItemTagsGen(PackOutput packOutput, ModResources resources, CompletableFuture<HolderLookup.Provider> registries, @Nullable ExistingFileHelper helper)
+    ItemTagsGen(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries)
     {
-        super(packOutput, BuiltInRegistries.ITEM, resources.modid(), registries, helper);
+        super(packOutput, registries, BannerCapes.MODID);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addTags(HolderLookup.Provider provider)
     {
-        buildTag(BannerCapesTags.BANNER_CAPES).addHolders(List.copyOf(BannerCapesItems.BANNER_CAPES.values()));
-        buildTag(BannerCapesTags.BANNER_ELYTRA_CAPES).addHolders(List.copyOf(BannerCapesItems.BANNER_ELYTRA_CAPES.values()));
+        List<Item> capes = BannerCapesItems.BANNER_CAPES.values().stream().map(DeferredItem::asItem).toList();
+        List<Item> elytraCapes = BannerCapesItems.BANNER_ELYTRA_CAPES.values().stream().map(DeferredItem::asItem).toList();
 
-        buildTag(EQUIPPABLE_ENCHANTABLE).addTags(BannerCapesTags.BANNER_CAPES, BannerCapesTags.BANNER_ELYTRA_CAPES);
-        buildTag(DURABILITY_ENCHANTABLE).addTag(BannerCapesTags.BANNER_ELYTRA_CAPES);
-        buildTag(CuriosTags.BACK).addTag(BannerCapesTags.BANNER_CAPES);
+        tag(BannerCapesTags.BANNER_CAPES).addAll(capes);
+        tag(BannerCapesTags.BANNER_ELYTRA_CAPES).addAll(elytraCapes);
+        tag(EQUIPPABLE_ENCHANTABLE).addTags(BannerCapesTags.BANNER_CAPES, BannerCapesTags.BANNER_ELYTRA_CAPES);
+        tag(DURABILITY_ENCHANTABLE).addTag(BannerCapesTags.BANNER_ELYTRA_CAPES);
     }
 }

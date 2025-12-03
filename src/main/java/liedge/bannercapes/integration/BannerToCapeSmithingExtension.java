@@ -4,11 +4,14 @@ import liedge.bannercapes.BannerToCapeRecipe;
 import mezz.jei.api.gui.builder.IIngredientAcceptor;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.recipe.IFocusGroup;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 final class BannerToCapeSmithingExtension extends BaseSmithingCategoryExtension<BannerToCapeRecipe>
 {
@@ -19,22 +22,22 @@ final class BannerToCapeSmithingExtension extends BaseSmithingCategoryExtension<
         ItemStack base = baseSlot.getDisplayedItemStack().orElse(ItemStack.EMPTY);
 
         SmithingRecipeInput input = new SmithingRecipeInput(template, base, ItemStack.EMPTY);
-        outputSlot.createDisplayOverrides().addItemStack(assembleRecipe(input, recipe));
+        outputSlot.createDisplayOverrides().add(assembleRecipe(input, recipe));
     }
 
     @Override
     public <T extends IIngredientAcceptor<T>> void setOutput(BannerToCapeRecipe recipe, T ingredientAcceptor)
     {
-        List<ItemStack> stacks = Arrays.stream(recipe.base().getItems()).toList();
-        if (stacks.size() != 1 || stacks.getFirst().isEmpty()) return;
+        ContextMap ctx = SlotDisplayContext.fromLevel(Objects.requireNonNull(Minecraft.getInstance().level));
 
-        ItemStack baseStack = stacks.getFirst();
-        ItemStack[] templateStacks = recipe.template().getItems();
+        ItemStack base = recipe.baseIngredient().display().resolveForFirstStack(ctx);
+        if (base.isEmpty()) return;
 
-        for (ItemStack ingredient : templateStacks)
+        List<ItemStack> templateStacks = recipe.templateIngredient().map(i -> i.display().resolveForStacks(ctx)).orElse(List.of());
+        for (ItemStack template : templateStacks)
         {
-            SmithingRecipeInput input = new SmithingRecipeInput(ingredient, baseStack, ItemStack.EMPTY);
-            ingredientAcceptor.addItemStack(assembleRecipe(input, recipe));
+            SmithingRecipeInput input = new SmithingRecipeInput(template, base, ItemStack.EMPTY);
+            ingredientAcceptor.add(assembleRecipe(input, recipe));
         }
     }
 }

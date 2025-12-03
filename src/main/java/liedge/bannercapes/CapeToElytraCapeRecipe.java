@@ -8,43 +8,40 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.SmithingRecipe;
 import net.minecraft.world.item.crafting.SmithingRecipeInput;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 
-public record CapeToElytraCapeRecipe(Ingredient base, Ingredient additional) implements CapeSmithingRecipe
-{
-    private static final MapCodec<CapeToElytraCapeRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Ingredient.CODEC.fieldOf("base").forGetter(CapeSmithingRecipe::base),
-            Ingredient.CODEC.fieldOf("additional").forGetter(CapeSmithingRecipe::additional))
-            .apply(instance, CapeToElytraCapeRecipe::new));
-    private static final StreamCodec<RegistryFriendlyByteBuf, CapeToElytraCapeRecipe> STREAM_CODEC = StreamCodec.composite(
-            Ingredient.CONTENTS_STREAM_CODEC, CapeToElytraCapeRecipe::base,
-            Ingredient.CONTENTS_STREAM_CODEC, CapeToElytraCapeRecipe::additional,
-            CapeToElytraCapeRecipe::new);
-    public static final RecipeSerializer<CapeToElytraCapeRecipe> SERIALIZER = new RecipeSerializer<>()
-    {
-        @Override
-        public MapCodec<CapeToElytraCapeRecipe> codec()
-        {
-            return CODEC;
-        }
+import java.util.Optional;
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CapeToElytraCapeRecipe> streamCodec()
-        {
-            return STREAM_CODEC;
-        }
-    };
+public final class CapeToElytraCapeRecipe extends CapeSmithingRecipe
+{
+    public static final MapCodec<CapeToElytraCapeRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("base").forGetter(SmithingRecipe::baseIngredient),
+            Ingredient.CODEC.fieldOf("addition").forGetter(o -> o.addition))
+            .apply(instance, CapeToElytraCapeRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, CapeToElytraCapeRecipe> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, SmithingRecipe::baseIngredient,
+            Ingredient.CONTENTS_STREAM_CODEC, o -> o.addition,
+            CapeToElytraCapeRecipe::new);
+
+    private final Ingredient addition;
+
+    public CapeToElytraCapeRecipe(Ingredient base, Ingredient addition)
+    {
+        super(base);
+        this.addition = addition;
+    }
 
     @Override
-    public Ingredient template()
+    protected SlotDisplay resultDisplay()
     {
-        return Ingredient.EMPTY;
+        return new SlotDisplay.TagSlotDisplay(BannerCapesTags.BANNER_ELYTRA_CAPES);
     }
 
     @Override
@@ -65,20 +62,14 @@ public record CapeToElytraCapeRecipe(Ingredient base, Ingredient additional) imp
     }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries)
-    {
-        return BannerCapesItems.BANNER_ELYTRA_CAPES.get(DyeColor.WHITE).toStack();
-    }
-
-    @Override
-    public boolean isIncomplete()
-    {
-        return base.isEmpty() || additional.isEmpty();
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer()
+    public RecipeSerializer<? extends SmithingRecipe> getSerializer()
     {
         return BannerCapesRecipeSerializers.CAPE_TO_ELYTRA_CAPE_SMITHING.get();
+    }
+
+    @Override
+    public Optional<Ingredient> additionIngredient()
+    {
+        return Optional.of(addition);
     }
 }

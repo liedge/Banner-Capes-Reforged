@@ -1,40 +1,72 @@
 package liedge.bannercapes;
 
-import net.minecraft.world.item.ItemStack;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SmithingRecipe;
-import net.minecraft.world.item.crafting.SmithingRecipeInput;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
 
-public interface CapeSmithingRecipe extends SmithingRecipe
+import java.util.List;
+import java.util.Optional;
+
+public abstract class CapeSmithingRecipe implements SmithingRecipe
 {
-    Ingredient template();
+    private final Ingredient base;
 
-    Ingredient base();
+    private PlacementInfo placementInfo;
 
-    Ingredient additional();
+    protected CapeSmithingRecipe(Ingredient base)
+    {
+        this.base = base;
+    }
+
+    protected abstract SlotDisplay resultDisplay();
 
     @Override
-    default boolean isTemplateIngredient(ItemStack stack)
+    public Optional<Ingredient> templateIngredient()
     {
-        return template().test(stack);
+        return Optional.empty();
     }
 
     @Override
-    default boolean isBaseIngredient(ItemStack stack)
+    public Ingredient baseIngredient()
     {
-        return base().test(stack);
+        return base;
     }
 
     @Override
-    default boolean isAdditionIngredient(ItemStack stack)
+    public Optional<Ingredient> additionIngredient()
     {
-        return additional().test(stack);
+        return Optional.empty();
     }
 
     @Override
-    default boolean matches(SmithingRecipeInput input, Level level)
+    public PlacementInfo placementInfo()
     {
-        return isTemplateIngredient(input.template()) && isBaseIngredient(input.base()) && isAdditionIngredient(input.addition());
+        if (placementInfo == null)
+            placementInfo = PlacementInfo.createFromOptionals(List.of(templateIngredient(), Optional.of(base), additionIngredient()));
+
+        return placementInfo;
     }
+
+    @Override
+    public final List<RecipeDisplay> display()
+    {
+        SmithingRecipeDisplay recipeDisplay = new SmithingRecipeDisplay(
+                Ingredient.optionalIngredientToDisplay(templateIngredient()),
+                base.display(),
+                Ingredient.optionalIngredientToDisplay(additionIngredient()),
+                resultDisplay(),
+                new SlotDisplay.ItemSlotDisplay(Items.SMITHING_TABLE));
+        return List.of(recipeDisplay);
+    }
+
+    public record Serializer<R extends CapeSmithingRecipe>(MapCodec<R> codec, StreamCodec<RegistryFriendlyByteBuf, R> streamCodec) implements RecipeSerializer<R>
+    { }
 }

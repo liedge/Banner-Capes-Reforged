@@ -15,19 +15,19 @@ abstract class BaseSmithingCategoryExtension<R extends CapeSmithingRecipe> imple
     @Override
     public <T extends IIngredientAcceptor<T>> void setTemplate(R recipe, T ingredientAcceptor)
     {
-        ingredientAcceptor.addIngredients(recipe.template());
+        recipe.templateIngredient().ifPresent(ingredientAcceptor::add);
     }
 
     @Override
     public <T extends IIngredientAcceptor<T>> void setBase(R recipe, T ingredientAcceptor)
     {
-        ingredientAcceptor.addIngredients(recipe.base());
+        ingredientAcceptor.add(recipe.baseIngredient());
     }
 
     @Override
     public <T extends IIngredientAcceptor<T>> void setAddition(R recipe, T ingredientAcceptor)
     {
-        ingredientAcceptor.addIngredients(recipe.additional());
+        recipe.additionIngredient().ifPresent(ingredientAcceptor::add);
     }
 
     @Override

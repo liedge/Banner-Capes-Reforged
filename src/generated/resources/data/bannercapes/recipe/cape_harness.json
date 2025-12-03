@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "i": {
-      "item": "minecraft:iron_ingot"
-    },
-    "s": {
-      "item": "minecraft:string"
-    }
+    "i": "minecraft:iron_ingot",
+    "s": "minecraft:string"
   },
   "pattern": [
     "i i",

@@ -1,9 +1,5 @@
 {
   "type": "bannercapes:cape_to_elytra_cape_smithing",
-  "additional": {
-    "item": "minecraft:elytra"
-  },
-  "base": {
-    "tag": "bannercapes:capes"
-  }
+  "addition": "minecraft:elytra",
+  "base": "#bannercapes:capes"
 }
