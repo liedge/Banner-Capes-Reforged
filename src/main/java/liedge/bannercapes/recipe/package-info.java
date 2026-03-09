@@ -1,4 +1,4 @@
 @NullMarked
-package liedge.bannercapes.client;
+package liedge.bannercapes.recipe;
 
 import org.jspecify.annotations.NullMarked;

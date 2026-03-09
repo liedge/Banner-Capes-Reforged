@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import liedge.bannercapes.registry.BannerCapesItems;
 import liedge.bannercapes.registry.BannerCapesRecipeSerializers;
 import liedge.bannercapes.registry.BannerCapesTabs;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -23,8 +23,8 @@ public class BannerCapes
         BannerCapesTabs.register(modBus);
     }
 
-    public static ResourceLocation loc(String path)
+    public static Identifier id(String path)
     {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
+        return Identifier.fromNamespaceAndPath(MODID, path);
     }
 }

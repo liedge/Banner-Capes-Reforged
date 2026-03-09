@@ -1,9 +1,9 @@
 package liedge.bannercapes.registry;
 
 import liedge.bannercapes.BannerCapes;
-import liedge.bannercapes.BannerToCapeRecipe;
-import liedge.bannercapes.CapeSmithingRecipe;
-import liedge.bannercapes.CapeToElytraCapeRecipe;
+import liedge.bannercapes.recipe.BannerToCapeRecipe;
+import liedge.bannercapes.recipe.CapeSmithingRecipe;
+import liedge.bannercapes.recipe.CapeToElytraCapeRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.bus.api.IEventBus;

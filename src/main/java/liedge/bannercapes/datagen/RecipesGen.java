@@ -2,8 +2,8 @@ package liedge.bannercapes.datagen;
 
 import liedge.bannercapes.BannerCapes;
 import liedge.bannercapes.BannerCapesTags;
-import liedge.bannercapes.BannerToCapeRecipe;
-import liedge.bannercapes.CapeToElytraCapeRecipe;
+import liedge.bannercapes.recipe.BannerToCapeRecipe;
+import liedge.bannercapes.recipe.CapeToElytraCapeRecipe;
 import liedge.bannercapes.registry.BannerCapesItems;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
@@ -30,7 +30,7 @@ class RecipesGen extends RecipeProvider
 
     private ResourceKey<Recipe<?>> key(String path)
     {
-        return ResourceKey.create(Registries.RECIPE, BannerCapes.loc(path));
+        return ResourceKey.create(Registries.RECIPE, BannerCapes.id(path));
     }
 
     @Override

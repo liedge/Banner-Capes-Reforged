@@ -10,5 +10,5 @@ This is a simple Minecraft mod for NeoForge. It allows you to convert banners to
   - Licensed under the [MIT License](LICENSE.md)
 - **Textures**
   - Copyright (c) 2025 Eduardo Jimenez
-  - ![Static Badge](https://img.shields.io/badge/License-CC--BY--SA_4.0-purple)
-  - Licensed under [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/deed.en)
+  - ![Static Badge](https://img.shields.io/badge/License-CC--BY--NC--SA_4.0-purple)
+  - Licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en)

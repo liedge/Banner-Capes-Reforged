@@ -1,6 +1,6 @@
 package liedge.bannercapes.integration;
 
-import liedge.bannercapes.CapeSmithingRecipe;
+import liedge.bannercapes.recipe.CapeSmithingRecipe;
 import mezz.jei.api.gui.builder.IIngredientAcceptor;
 import mezz.jei.api.recipe.category.extensions.vanilla.smithing.ISmithingCategoryExtension;
 import net.minecraft.client.Minecraft;

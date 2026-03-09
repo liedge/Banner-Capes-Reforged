@@ -1,4 +1,4 @@
-package liedge.bannercapes;
+package liedge.bannercapes.recipe;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.SmithingRecipe;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public abstract class CapeSmithingRecipe implements SmithingRecipe
 {
     private final Ingredient base;
 
-    private PlacementInfo placementInfo;
+    private @Nullable PlacementInfo placementInfo;
 
     protected CapeSmithingRecipe(Ingredient base)
     {

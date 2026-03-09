@@ -1,6 +1,6 @@
 package liedge.bannercapes.integration;
 
-import liedge.bannercapes.CapeToElytraCapeRecipe;
+import liedge.bannercapes.recipe.CapeToElytraCapeRecipe;
 import mezz.jei.api.gui.builder.IIngredientAcceptor;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.recipe.IFocusGroup;

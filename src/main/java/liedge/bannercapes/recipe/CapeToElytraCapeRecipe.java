@@ -1,7 +1,9 @@
-package liedge.bannercapes;
+package liedge.bannercapes.recipe;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import liedge.bannercapes.BannerCapeItem;
+import liedge.bannercapes.BannerCapesTags;
 import liedge.bannercapes.registry.BannerCapesItems;
 import liedge.bannercapes.registry.BannerCapesRecipeSerializers;
 import net.minecraft.core.HolderLookup;

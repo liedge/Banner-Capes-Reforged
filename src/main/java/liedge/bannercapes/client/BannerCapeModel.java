@@ -5,9 +5,9 @@ import net.minecraft.client.entity.ClientAvatarEntity;
 import net.minecraft.client.entity.ClientAvatarState;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Avatar;
@@ -70,7 +70,7 @@ public final class BannerCapeModel extends Model<AvatarRenderState>
 
     public BannerCapeModel()
     {
-        super(createRoot(), RenderType::entitySolid);
+        super(createRoot(), RenderTypes::entitySolid);
     }
 
     @Override
