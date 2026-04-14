@@ -6,12 +6,10 @@ import net.minecraft.client.entity.ClientAvatarState;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Avatar;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 
@@ -21,11 +19,9 @@ import java.util.Map;
 
 public final class BannerCapeModel extends Model<AvatarRenderState>
 {
-    public static void extractCapeState(Entity uncheckedEntity, EntityRenderState uncheckedState, float partialTick)
+    public static <T extends Avatar & ClientAvatarEntity> void extractCapeState(T entity, AvatarRenderState renderState, float partialTick)
     {
-        if (!(uncheckedEntity instanceof Avatar entity && uncheckedEntity instanceof ClientAvatarEntity clientAvatar && uncheckedState instanceof AvatarRenderState renderState)) return;
-
-        ClientAvatarState avatarState = clientAvatar.avatarState();
+        ClientAvatarState avatarState = entity.avatarState();
 
         double desiredX = avatarState.getInterpolatedCloakX(partialTick) - Mth.lerp(partialTick, entity.xo, entity.getX());
         double desiredY = avatarState.getInterpolatedCloakY(partialTick) - Mth.lerp(partialTick, entity.yo, entity.getY());

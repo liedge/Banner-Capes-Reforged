@@ -4,26 +4,26 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import liedge.bannercapes.BannerCapeItem;
 import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BannerRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.MaterialSet;
-import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.world.item.ItemStack;
 
 public class BannerCapeLayer extends RenderLayer<AvatarRenderState, PlayerModel>
 {
     private final BannerCapeModel capeModel;
-    private final MaterialSet materials;
+    private final SpriteGetter spriteGetter;
 
-    public BannerCapeLayer(RenderLayerParent<AvatarRenderState, PlayerModel> renderer, MaterialSet materials)
+    public BannerCapeLayer(RenderLayerParent<AvatarRenderState, PlayerModel> renderer, SpriteGetter spriteGetter)
     {
         super(renderer);
         this.capeModel = new BannerCapeModel();
-        this.materials = materials;
+        this.spriteGetter = spriteGetter;
     }
 
     @Override
@@ -41,21 +41,30 @@ public class BannerCapeLayer extends RenderLayer<AvatarRenderState, PlayerModel>
         poseStack.mulPose(Axis.YP.rotationDegrees(180f - renderState.capeLean2 / 2f));
         poseStack.scale(0.5f, 0.5f, 0.5f);
 
+        nodeCollector.submitModel(
+                capeModel,
+                renderState,
+                poseStack,
+                packedLight,
+                OverlayTexture.NO_OVERLAY,
+                -1,
+                Sheets.BANNER_BASE,
+                spriteGetter,
+                renderState.outlineColor,
+                null);
+
         BannerRenderer.submitPatterns(
-                materials,
+                spriteGetter,
                 poseStack,
                 nodeCollector,
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
                 capeModel,
                 renderState,
-                ModelBakery.BANNER_BASE,
                 true,
                 capeItem.getBaseColor(),
                 capeItem.getPatternLayers(chestItem),
-                false,
-                null,
-                0);
+                null);
 
         poseStack.popPose();
     }

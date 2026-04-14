@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import liedge.bannercapes.BannerCapesTags;
 import liedge.bannercapes.registry.BannerCapesItems;
 import liedge.bannercapes.registry.BannerCapesRecipeSerializers;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -46,7 +45,7 @@ public final class BannerToCapeRecipe extends CapeSmithingRecipe
     }
 
     @Override
-    public ItemStack assemble(SmithingRecipeInput input, HolderLookup.Provider registries)
+    public ItemStack assemble(SmithingRecipeInput input)
     {
         ItemStack templateInput = input.template();
         if (!(templateInput.getItem() instanceof BannerItem bannerItem)) return ItemStack.EMPTY;
@@ -57,7 +56,7 @@ public final class BannerToCapeRecipe extends CapeSmithingRecipe
     }
 
     @Override
-    public RecipeSerializer<? extends SmithingRecipe> getSerializer()
+    public RecipeSerializer<? extends CapeSmithingRecipe> getSerializer()
     {
         return BannerCapesRecipeSerializers.BANNER_TO_CAPE_SMITHING.get();
     }

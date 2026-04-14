@@ -1,29 +1,25 @@
 package liedge.bannercapes.recipe;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SmithingRecipe;
+import net.minecraft.world.item.crafting.SimpleSmithingRecipe;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.item.crafting.display.SmithingRecipeDisplay;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
 
-public abstract class CapeSmithingRecipe implements SmithingRecipe
+public abstract class CapeSmithingRecipe extends SimpleSmithingRecipe
 {
-    private final Ingredient base;
+    private static final CommonInfo COMMON_INFO = new CommonInfo(true);
 
-    private @Nullable PlacementInfo placementInfo;
+    private final Ingredient base;
 
     protected CapeSmithingRecipe(Ingredient base)
     {
+        super(COMMON_INFO);
         this.base = base;
     }
 
@@ -48,12 +44,9 @@ public abstract class CapeSmithingRecipe implements SmithingRecipe
     }
 
     @Override
-    public PlacementInfo placementInfo()
+    protected PlacementInfo createPlacementInfo()
     {
-        if (placementInfo == null)
-            placementInfo = PlacementInfo.createFromOptionals(List.of(templateIngredient(), Optional.of(base), additionIngredient()));
-
-        return placementInfo;
+        return PlacementInfo.createFromOptionals(List.of(templateIngredient(), Optional.of(base), additionIngredient()));
     }
 
     @Override
@@ -67,7 +60,4 @@ public abstract class CapeSmithingRecipe implements SmithingRecipe
                 new SlotDisplay.ItemSlotDisplay(Items.SMITHING_TABLE));
         return List.of(recipeDisplay);
     }
-
-    public record Serializer<R extends CapeSmithingRecipe>(MapCodec<R> codec, StreamCodec<RegistryFriendlyByteBuf, R> streamCodec) implements RecipeSerializer<R>
-    { }
 }
